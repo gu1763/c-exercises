@@ -1,0 +1,78 @@
+#include<stdio.h>
+int flag=0,blank=1;
+int run(int year)
+{
+	if((year%4==0&&year%100!=0)||year%400==0)
+		return 1;
+	else return 0;	
+} 
+
+int yue(int month,int r)
+{
+	switch(month)
+	{
+		case 1: case 3: case 5: case 7: case 8: case 10: case 12:
+			return 31;
+		case 4: case 6: case 9: case 11:
+			return 30;
+		case 2:
+			if(r) return 29;
+			else return 28;
+	}
+}
+
+int bl(int year,int blank)
+{
+	for(int k=1900;k<year;k++)
+	{
+		if(run(k)) blank+=2;
+		else blank+=1;
+	}
+	return blank%7;
+}
+
+int pr(int year,int month,int r)
+{
+	flag=0; 
+	int day=yue(month,r);
+	printf("      %d年%d月\n",year,month);
+	printf(" 日 一 二 三 四 五 六\n");
+	for(int i=0;i<blank;i++)
+	{
+		printf("   ");
+		flag++;
+	}
+	for(int j=1;j<=day;j++)
+	{
+		printf("%3d",j);
+		flag++;
+		if(flag==7)
+		{
+			printf("\n");
+			flag=0;
+		}
+	}
+	if(flag!=0) printf("\n");
+	blank=flag%7;
+}
+int main()
+{
+	int year,month=1,r;
+	while(1)
+	{
+		printf("请输入年份：");
+		scanf("%d",&year);
+		if(year<1900)
+		{
+			printf("请输入1900年及以后的年份！"); 
+		}	
+		else break; 
+	}
+	r=run(year);
+	blank=bl(year,blank);
+	for(month=1;month<13;month++)
+	{
+		pr(year,month,r);
+	}
+	return 0;
+}
